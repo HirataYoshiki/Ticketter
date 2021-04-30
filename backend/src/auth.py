@@ -12,11 +12,11 @@ from fastapi import Depends, APIRouter, HTTPException, Header
 import firebase_admin
 import firebase_admin.auth
 
-
-async def verify_id_token(Authorization: Optional[str] = Header(None)):
+async def verify_id_token(Authorization: Optional[str] = Header(None))-> dict:
   try:
     verified_user_data = firebase_admin.auth.verify_id_token(Authorization)
     return verified_user_data
+  except firebase_admin.auth.InvalidIdTokenError as e:
+    raise HTTPException(status_code = 400, detail = e.default_message)
   except Exception as e:
-    print(e)
-    raise HTTPException(status_code=400)
+    raise HTTPException(status_code = e.code, detail = e.message)
