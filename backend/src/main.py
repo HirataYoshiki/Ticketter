@@ -5,18 +5,16 @@ import uvicorn
 import firebase_admin
 
 from firebase_admin import credentials
-from auth import router as authrouter
+
+from apps.app_routers import routers
 
 cred = credentials.Certificate(os.getenv('FIREBASE_CREDENTIAL_FILE_PATH'))
 firebase_admin.initialize_app(cred)
-#from Routers import ROUTERS
-#from db import engine
 
 
-#for router in ROUTERS:
-#  app.include_router(router)
 app=FastAPI()
-app.include_router(authrouter)
+for router in routers:
+  app.include_router(router)
 """
   
 @app.on_event("startup")
