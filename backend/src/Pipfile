@@ -10,6 +10,8 @@ firebase-admin = "*"
 pydantic = "*"
 sqlalchemy = "*"
 pymysql = "*"
+async-exit-stack = "*"
+async-generator = "*"
 
 [dev-packages]
 pytest = "*"

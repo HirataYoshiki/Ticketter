@@ -8,14 +8,24 @@ Function:
 from typing import Optional
 
 from fastapi import Depends, APIRouter, HTTPException, Header
+from pydantic import BaseModel
 
 import firebase_admin
 import firebase_admin.auth
 
-async def verify_id_token(Authorization: Optional[str] = Header(None))-> dict:
+class UserTokendata(BaseModel):
+  localId: str
+  idToken: str
+  registered: Optional[bool] = None
+  refleshToken: Optional[str] = None
+  expiresIn: Optional[str] = None
+  email: Optional[str] = None
+  displayName: Optional[str] = None
+
+async def verify_id_token(Authorization: Optional[str] = Header(None))-> UserTokendata:
   try:
     verified_user_data = firebase_admin.auth.verify_id_token(Authorization)
-    return verified_user_data
+    return UserTokendata(localId = verified_user_data['localId'], idToken = verified_user_data['idToken'])
   except firebase_admin.auth.InvalidIdTokenError as e:
     raise HTTPException(status_code = 400, detail = e.default_message)
   except Exception as e:

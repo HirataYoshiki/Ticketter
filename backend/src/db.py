@@ -15,11 +15,12 @@ with open(os.getenv('CLOUD_MYSQL_IDPASS_FILE_PATH'),'r') as f:
 
 
 engine = sqlalchemy.create_engine(
-    sqlalchemy.engine.url.URL(
+    sqlalchemy.engine.url.URL.create(
             drivername="mysql+pymysql",
             username=db_user,
             password=db_pass,
             host=db_hostname,
+            port = db_port,
             database=db_name
         ),
         echo=True

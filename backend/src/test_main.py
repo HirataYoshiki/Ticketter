@@ -49,6 +49,16 @@ def test_success_login():
   response = login(input_["email"], input_["password"])
   LoginData["data"] = json.loads(response.content)
   assert response.status_code == output['status_code']
+  
+def test_create_user():
+  headers = {
+    "Authrization": LoginData["data"]["idToken"]
+  }
+  output = {
+    "status_code": 200
+  }
+  response = client.post('/users', headers = headers)
+  assert response.status_code == output["status_code"]
 
 def test_fail_get_user_by_uid():
   input_ = {
