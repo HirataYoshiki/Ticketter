@@ -8,6 +8,8 @@ fastapi = "*"
 uvicorn = "*"
 firebase-admin = "*"
 pydantic = "*"
+sqlalchemy = "*"
+pymysql = "*"
 
 [dev-packages]
 pytest = "*"

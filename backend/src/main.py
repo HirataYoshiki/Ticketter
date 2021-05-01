@@ -6,6 +6,7 @@ import uvicorn
 import firebase_admin
 from firebase_admin import credentials
 
+from db import engine
 from apps.app_routers import routers
 
 cred = credentials.Certificate(os.getenv('FIREBASE_CREDENTIAL_FILE_PATH'))
@@ -15,7 +16,7 @@ firebase_admin.initialize_app(cred)
 app=FastAPI()
 for router in routers:
   app.include_router(router)
-"""
+
   
 @app.on_event("startup")
 async def startup():
@@ -25,7 +26,7 @@ async def startup():
 async def shutdown():
   engine.disconnect()
   
-"""
+
 
 # this is just for test------------------------------------------------------
 from pydantic import BaseModel
