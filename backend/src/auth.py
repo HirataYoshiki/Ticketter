@@ -14,18 +14,15 @@ import firebase_admin
 import firebase_admin.auth
 
 class UserTokendata(BaseModel):
-  localId: str
-  idToken: str
-  registered: Optional[bool] = None
-  refleshToken: Optional[str] = None
-  expiresIn: Optional[str] = None
-  email: Optional[str] = None
-  displayName: Optional[str] = None
+  user_id: str
+  email: str
 
 async def verify_id_token(Authorization: Optional[str] = Header(None))-> UserTokendata:
   try:
+    if not Authorization:
+      raise HTTPException(status_code=400, detail="No Header 'Authorization' Found.")
     verified_user_data = firebase_admin.auth.verify_id_token(Authorization)
-    return UserTokendata(localId = verified_user_data['localId'], idToken = verified_user_data['idToken'])
+    return UserTokendata(**verified_user_data)
   except firebase_admin.auth.InvalidIdTokenError as e:
     raise HTTPException(status_code = 400, detail = e.default_message)
   except Exception as e:

@@ -6,5 +6,5 @@ from sqlalchemy.orm import relationship
 
 class Users(Base):
   __tablename__ = "users"
-  uid = Column(Integer, primary_key=True, index=True)
+  uid = Column(Integer, primary_key=True)
   ticketmax = Column(Integer)

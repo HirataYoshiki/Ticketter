@@ -24,9 +24,6 @@ def login(email: str, password: str) -> dict:
   response = requests.post(signin_url, payload)
   return response
 
-def get_id_token(response):
-  return response.get('idToken')
-
 def test_fail_login():
   input_ = {
     "email": "xxx@sss.ss",
@@ -52,12 +49,13 @@ def test_success_login():
   
 def test_create_user():
   headers = {
-    "Authrization": LoginData["data"]["idToken"]
+    "Authorization": LoginData["data"]["idToken"]
   }
   output = {
     "status_code": 200
   }
   response = client.post('/users', headers = headers)
+  assert response.headers == {"location": "aa"}
   assert response.status_code == output["status_code"]
 
 def test_fail_get_user_by_uid():
@@ -71,7 +69,7 @@ def test_fail_get_user_by_uid():
     "status_code": 400
   }
   response = client.get(f'/users/{input_["uid"]}', headers=headers)
-  assert response.status_code == 400
+  assert response.status_code == output['status_code']
 
 def test_fail_get_user_by_uid_id_token_is_invalid():
   input_ = {
@@ -98,3 +96,13 @@ def test_success_get_user_by_uid():
   }
   response = client.get(f'/users/{input_["uid"]}', headers=headers)
   assert response.status_code == output['status_code']
+
+def test_testcreatedata():
+  json = {"name": "test", "content": "is this work?"}
+  
+  response = client.post('/test',json = json)
+  assert response.json() == {"result": True}
+
+def test_testgetdata():
+  response = client.get('/test')
+  assert response.status_code == 200
