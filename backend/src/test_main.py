@@ -49,7 +49,7 @@ def test_success_login():
   
 def test_create_user():
   headers = {
-    "Authorization": LoginData["data"]["idToken"]
+    "Authorization":f"Bearer {LoginData['data']['idToken']}"
   }
   output = {
     "status_code": 200
@@ -63,7 +63,7 @@ def test_fail_get_user_by_uid():
     "uid": "ddggheh"
   }
   headers = {
-    "Authorization": LoginData["data"]['idToken']
+    "Authorization":f"Bearer {LoginData['data']['idToken']}"
   }
   output = {
     "status_code": 400
@@ -76,7 +76,7 @@ def test_fail_get_user_by_uid_id_token_is_invalid():
     "uid": LoginData["data"]['localId']
   }
   headers = {
-    "Authorization": "IDTOKEN"
+    "Authorization": "Bearer IDTOKEN"
   }
   output = {
     "status_code": 400
@@ -89,7 +89,7 @@ def test_success_get_user_by_uid():
     "uid": LoginData["data"]['localId']
   }
   headers = {
-    "Authorization": LoginData["data"]['idToken']
+    "Authorization":f"Bearer {LoginData['data']['idToken']}"
   }
   output = {
     "status_code": 200
