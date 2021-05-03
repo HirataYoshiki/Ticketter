@@ -7,6 +7,10 @@ router = APIRouter()
 async def create_user(user: Schemes.UserOut = Depends(Controls.create_user)):
   return user
 
+@router.get('/users')
+async def get_users(users: list = Depends(Controls.get_users)):
+  return users
+
 @router.get('/users/{uid}', response_model = Schemes.UserOut)
 async def get_user_by_uid(user: Schemes.UserOut = Depends(Controls.get_user_by_uid)):
   return user

@@ -28,35 +28,7 @@ Base.metadata.create_all(bind=engine)
 @app.on_event("shutdown")
 async def shutdown():
   engine.disconnect()
-  
 
-
-# this is just for test------------------------------------------------------
-from apps.Test.route import router as testrouter
-app.include_router(testrouter)
-from pydantic import BaseModel
-from fastapi import Depends
-import os, json
-with open(os.getenv('IDPLATFORM_API_KEY_FILE_PATH'),'r') as f:
-  PAYLOAD = json.load(f)
-  API_KEY = PAYLOAD['API_KEY']
-class IdTokenInput(BaseModel):
-  email: str
-  password: str
-
-@app.post('/test/getidtoken')
-async def get_id_token(inputs: IdTokenInput):
-  import requests
-  url = f"https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key={API_KEY}"
-  payload = {
-    "email": inputs.email,
-    "password": inputs.password,
-    "returnSecureToken": True
-  }
-  response = requests.post(url, payload)
-  id_token = json.loads(response.content)['idToken']
-  return {"id_token": id_token}
-#-----------------------------------------------------------------------------------------------
 
 if __name__ == "__main__":
   uvicorn.run(app,host="0.0.0.0",port=8080)

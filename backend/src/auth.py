@@ -26,12 +26,15 @@ async def verify_id_token(authorization: str = Depends(api_key))-> UserTokendata
     detail="Could not validate token",
     headers={"WWW-Authenticate": authorization},
     )
-  if authorization:
-    auth = authorization.split(" ")
-  if len(auth) != 2:
+  try:
+    if authorization:
+      auth = authorization.split(" ")
+    if len(auth) != 2:
+      raise credentials_exception
+    if auth[0] != "Bearer":
+      raise credentials_exception
+    id_token = auth[1]
+    verified_user_data = firebase_admin.auth.verify_id_token(id_token)
+    return UserTokendata(**verified_user_data)
+  except:
     raise credentials_exception
-  if auth[0] != "Bearer":
-    raise credentials_exception
-  id_token = auth[1]
-  verified_user_data = firebase_admin.auth.verify_id_token(id_token)
-  return UserTokendata(**verified_user_data)

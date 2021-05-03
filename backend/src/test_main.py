@@ -55,10 +55,19 @@ def test_create_user():
     "status_code": 200
   }
   response = client.post('/users', headers = headers)
-  assert response.headers == {"location": "aa"}
   assert response.status_code == output["status_code"]
 
-def test_fail_get_user_by_uid():
+def test_get_all_usres():
+  headers = {
+    "Authorization":f"Bearer {LoginData['data']['idToken']}"
+  }
+  output = {
+    "status_code": 200
+  }
+  response = client.get('/users', headers = headers)
+  assert response.status_code == 200
+
+def test_fail_get_user_by_uid_user_not_found():
   input_ = {
     "uid": "ddggheh"
   }
@@ -66,7 +75,7 @@ def test_fail_get_user_by_uid():
     "Authorization":f"Bearer {LoginData['data']['idToken']}"
   }
   output = {
-    "status_code": 400
+    "status_code": 404
   }
   response = client.get(f'/users/{input_["uid"]}', headers=headers)
   assert response.status_code == output['status_code']
@@ -79,7 +88,7 @@ def test_fail_get_user_by_uid_id_token_is_invalid():
     "Authorization": "Bearer IDTOKEN"
   }
   output = {
-    "status_code": 400
+    "status_code": 401
   }
   response = client.get(f'/users/{input_["uid"]}', headers=headers)
   assert response.status_code == output['status_code']
@@ -97,12 +106,60 @@ def test_success_get_user_by_uid():
   response = client.get(f'/users/{input_["uid"]}', headers=headers)
   assert response.status_code == output['status_code']
 
-def test_testcreatedata():
-  json = {"name": "test", "content": "is this work?"}
-  
-  response = client.post('/test',json = json)
-  assert response.json() == {"result": True}
+def test_fail_create_ticket_id_token_is_invalid():
+  input_ = {
+    "json": {
+      "name": "ticket",
+      "text": "this is test ticket"
+    } 
+  }
+  headers = {
+    "Authorization":f"Bearer sgsdg"
+  }
+  output = {
+    "status_code": 401
+  }
+  response = client.post('/tickets', json = input_['json'], headers = headers)
+  assert response.status_code==output['status_code']
 
-def test_testgetdata():
-  response = client.get('/test')
-  assert response.status_code == 200
+def test_fail_create_ticket_data_is_invalid():
+  input_ = {
+    "json": {
+      "namer": "ticket",
+      "text": "this is test ticket"
+    } 
+  }
+  headers = {
+    "Authorization":f"Bearer {LoginData['data']['idToken']}"
+  }
+  output = {
+    "status_code": 422
+  }
+  response = client.post('/tickets', json = input_['json'], headers = headers)
+  assert response.status_code == output['status_code']
+
+def test_success_create_ticket():
+  input_ = {
+    "json": {
+      "name": "ticket",
+      "text": "this is test ticket"
+    } 
+  }
+  headers = {
+    "Authorization":f"Bearer {LoginData['data']['idToken']}"
+  }
+  output = {
+    "status_code": 200
+  }
+  response = client.post('/tickets', json = input_['json'], headers = headers)
+  assert response.status_code == output['status_code']
+
+def test_success_get_tickets():
+  headers = {
+    "Authorization":f"Bearer {LoginData['data']['idToken']}"
+  }
+  output = {
+    "status_code": 200
+  }
+  response = client.get('/tickets', headers = headers)
+  assert response.status_code == output['status_code']
