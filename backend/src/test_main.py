@@ -163,3 +163,67 @@ def test_success_get_tickets():
   }
   response = client.get('/tickets', headers = headers)
   assert response.status_code == output['status_code']
+
+def test_fail_give_a_ticket_uid_is_invalid():
+  input_ = {
+    "uid": "fess",
+    "json": {
+      "ticketid": 1
+    }
+  }
+  headers = {
+    "Authorization":f"Bearer {LoginData['data']['idToken']}"
+  }
+  output = {
+    "status_code": 404
+  }
+  response = client.post(f'/interactions/{input_["uid"]}',json=input_['json'], headers = headers)
+  assert response.status_code == output['status_code']
+
+def test_fail_give_a_ticket_ticketid_is_invalid():
+  input_ = {
+    "uid": "WRk791v2hQUFHZP9GBMcRXTqdxb2",
+    "json": {
+      "ticketid": 100
+    }
+  }
+  headers = {
+    "Authorization":f"Bearer {LoginData['data']['idToken']}"
+  }
+  output = {
+    "status_code": 400
+  }
+  response = client.post(f'/interactions/{input_["uid"]}',json=input_['json'], headers = headers)
+  assert response.status_code == output['status_code']
+
+def test_success_give_tickets():
+  input_ = {
+    "json": {
+      "ticketid": 1,
+      "to_": ["WRk791v2hQUFHZP9GBMcRXTqdxb2"]
+    }
+  }
+  headers = {
+    "Authorization":f"Bearer {LoginData['data']['idToken']}"
+  }
+  output = {
+    "status_code": 200
+  }
+  response = client.post(f'/interactions',json=input_['json'], headers = headers)
+  assert response.status_code == output['status_code']
+
+def test_success_delete_my_given_ticket():
+  input_ = {
+    "json": {
+      "interactionList": [1]
+    }
+  }
+  headers = {
+    "Authorization":f"Bearer {LoginData['data']['idToken']}"
+  }
+  output = {
+    "status_code": 200
+  }
+  response = client.delete(f'/interactions',json=input_['json'], headers = headers)
+  assert response.status_code == output['status_code']
+

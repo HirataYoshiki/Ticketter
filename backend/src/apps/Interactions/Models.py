@@ -5,6 +5,7 @@ from sqlalchemy.orm import relationship
 
 
 class Interactions(Base):
+  __tablename__ = "interactions"
   id = Column(Integer, primary_key = True, autoincrement = True)
   ticketid = Column(Integer)
   from_ = Column(String(100))

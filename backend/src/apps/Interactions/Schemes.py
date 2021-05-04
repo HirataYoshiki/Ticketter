@@ -19,4 +19,4 @@ class TicketInteractionMultiOut(BaseModel):
   interactionList: List[TicketInteractionOut]
 
 class TicketInteractionMultiDeleteIn(BaseModel):
-  interactionList: List[str]
+  interactionList: List[int]
