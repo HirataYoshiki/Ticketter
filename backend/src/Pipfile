@@ -12,6 +12,7 @@ sqlalchemy = "*"
 pymysql = "*"
 async-exit-stack = "*"
 async-generator = "*"
+gunicorn = "*"
 
 [dev-packages]
 pytest = "*"

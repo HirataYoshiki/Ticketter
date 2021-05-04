@@ -12,4 +12,4 @@ class UserOut(BaseModel):
   uid: str
   ticketmax: Optional[int] = 3 
   # set 'optional' to be able to change value
-  # I am planning to change value if user pay for ticket.
+  # I am planning to change max number of tickets if user are willing to paying for tickets.
