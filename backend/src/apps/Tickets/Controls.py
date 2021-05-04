@@ -34,6 +34,8 @@ async def create_ticket(
   ) -> Schemes.TicketOut:
   if maxTickets(token.user_id, session) <= nowTickets(token.user_id, session):
     raise HTTPException(status_code= 422)
+  if ticketin.volumemax > 100:
+    raise HTTPException(status_code=400, detail="the volume of tickets be under 100.")
   timestamp = datetime.now()
   adds = Models.Tickets(
     **ticketin.dict(),
@@ -69,7 +71,7 @@ async def get_tickets(
   query = session.query(Models.Tickets)
   query = query.limit(limit)
   query = query.offset(skip)
-  return query.all()
+  return list(map(lambda x: Schemes.TicketOut(**x.__dict__), query.all()))
   
 async def get_ticket(
   ticketid: int,

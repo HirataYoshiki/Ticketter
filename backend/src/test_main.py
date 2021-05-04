@@ -57,7 +57,7 @@ def test_create_user():
   response = client.post('/users', headers = headers)
   assert response.status_code == output["status_code"]
 
-def test_get_all_usres():
+def test_get_all_users():
   headers = {
     "Authorization":f"Bearer {LoginData['data']['idToken']}"
   }
@@ -215,7 +215,7 @@ def test_success_give_tickets():
 def test_success_delete_my_given_ticket():
   input_ = {
     "json": {
-      "interactionList": [1]
+      "interactionidList": [1]
     }
   }
   headers = {

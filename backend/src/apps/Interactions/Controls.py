@@ -75,7 +75,7 @@ async def give_tickets(
       Models.Interactions.from_ == token.user_id,
       Models.Interactions.ticketid == interactions.ticketid
     ).all()
-    return results
+    return list(map(lambda x: Schemes.TicketInteractionOut(**x.__dict__),results))
   except:
     raise HTTPException(status_code=400, detail="Error Occuered. try it again")
 
@@ -87,14 +87,12 @@ async def delete_my_given_tickets(
     deletes = Models.Interactions.__table__.delete().where(
       and_(
         Models.Interactions.__table__.c.to_ == token.user_id,
-        Models.Interactions.__table__.c.ticketid.in_(ticketids.interactionList)
+        Models.Interactions.__table__.c.ticketid.in_(ticketids.interactionidList)
       )
     )
     session.execute(deletes)
     session.commit()
-    return {
-      "delete": ticketids
-    }
+    return  ticketids.interactionidList
   except:
     raise HTTPException(status_code = 400)
 

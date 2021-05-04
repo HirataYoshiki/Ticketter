@@ -6,6 +6,7 @@ class TicketInteractionIn(BaseModel):
   ticketid: int
 
 class TicketInteractionOut(BaseModel):
+  interactionid: int
   ticketid: int
   from_: str
   to_: str
@@ -19,4 +20,4 @@ class TicketInteractionMultiOut(BaseModel):
   interactionList: List[TicketInteractionOut]
 
 class TicketInteractionMultiDeleteIn(BaseModel):
-  interactionList: List[int]
+  interactionidList: List[int]

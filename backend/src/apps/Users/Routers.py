@@ -1,3 +1,5 @@
+from typing import List
+
 from fastapi import APIRouter, Depends
 from apps.Users import Schemes
 from apps.Users import Controls
@@ -7,7 +9,7 @@ router = APIRouter()
 async def create_user(user: Schemes.UserOut = Depends(Controls.create_user)):
   return user
 
-@router.get('/users')
+@router.get('/users', response_model = List[Schemes.UserOut])
 async def get_users(users: list = Depends(Controls.get_users)):
   return users
 

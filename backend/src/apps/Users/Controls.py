@@ -35,6 +35,6 @@ async def get_user_by_uid(uid: str, userdata: UserTokendata = Depends(verify_id_
 
 async def get_users(userdata: UserTokendata = Depends(verify_id_token), session: Session = Depends(get_session)):
   try:
-    return session.query(Models.Users).all()
+    return list(map(lambda x: Schemes.UserOut(**x.__dict__),session.query(Models.Users).all()))
   except Exception:
     raise HTTPException(status_code=400)
