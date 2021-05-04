@@ -19,9 +19,11 @@ engine = sqlalchemy.create_engine(
             drivername="mysql+pymysql",
             username=db_user,
             password=db_pass,
-            host=db_hostname,
-            port = db_port,
-            database=db_name
+            database=db_name,
+            query={
+                "unix_socket": "/cloudsql/{}".format(
+                    cloud_sql_connection_name)
+            }
         ),
         echo=True
     )

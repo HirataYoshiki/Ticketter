@@ -3,4 +3,5 @@ __pycashe__
 .ideas
 .pytest_cashe
 .vscode
+.venv
 test_main.py
