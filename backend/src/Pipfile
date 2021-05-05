@@ -5,9 +5,17 @@ name = "pypi"
 
 [packages]
 fastapi = "*"
-uvicorn = "*"
+firebase-admin = "*"
+pydantic = "*"
+sqlalchemy = "*"
+pymysql = "*"
+async-exit-stack = "*"
+async-generator = "*"
+gunicorn = "*"
+uvicorn = {extras = ["standard"], version = "*"}
 
 [dev-packages]
+pytest = "*"
 
 [requires]
 python_version = "3.9"

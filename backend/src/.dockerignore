@@ -1,0 +1,7 @@
+__pycashe__
+*.pyc
+.ideas
+.pytest_cashe
+.vscode
+.venv
+test_main.py
