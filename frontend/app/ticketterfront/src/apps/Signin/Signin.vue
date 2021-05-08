@@ -24,9 +24,7 @@ export default {
         {
           provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
           signInMethod: firebase.auth.EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD
-        },
-        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-        firebase.auth.TwitterAuthProvider.PROVIDER_ID,
+        }
       ]
     }
     ui.start('#firebaseui-auth-container', uiConfig)

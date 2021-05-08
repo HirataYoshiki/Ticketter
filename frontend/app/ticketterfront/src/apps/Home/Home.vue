@@ -7,7 +7,7 @@
     </b-row>
     <b-row>
       <b-card-group deck>
-        <div v-if="tickets===[]">
+        <div v-if="!tickets">
           <b-card
            border-variant="light"
            class="text-center"
@@ -58,10 +58,12 @@ export default {
     }
   },
   created: async function () {
-    const tickets = await this.requestMethods.tickets.get_all_tickets()
-    if (tickets) {
-      this.tickets = tickets
-      return true
+    if (this.user) {
+      const tickets = await this.requestMethods.tickets.get_all_tickets()
+      if (tickets) {
+        this.tickets = tickets
+        return true
+      }
     }
     this.tickets = []
     return true

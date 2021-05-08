@@ -116,22 +116,9 @@ export default {
     }
   },
   created () {
-    firebase.auth().onAuthStateChanged(async user => {
+    firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.user = user
-        try {
-          const uid = firebase.auth().currentUser.uid
-          const userdata = await this.get_one_user(uid)
-          if (userdata) {
-            return true
-          } else {
-            await this.post_user()
-            return true
-          }
-        } catch (e) {
-          alert ('error occured. try again')
-          return true
-        }
       }
       this.user = {}
       return true
