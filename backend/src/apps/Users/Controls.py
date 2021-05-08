@@ -1,9 +1,9 @@
 from fastapi import Depends, HTTPException
-<<<<<<< HEAD
+
 
 from auth import verify_id_token
 from apps.Users import Schemes
-=======
+
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
 
@@ -13,13 +13,11 @@ from apps.Users import Models
 from db import get_session
 
 from sqlalchemy.orm.exc import NoResultFound
->>>>>>> develop
 
 import firebase_admin
 import firebase_admin.auth
 import firebase_admin.exceptions
 
-<<<<<<< HEAD
 async def get_user_by_uid(uid: str, userdata:dict = Depends(verify_id_token)):
   try:
     userdata = firebase_admin.auth.get_user(uid)
@@ -28,7 +26,6 @@ async def get_user_by_uid(uid: str, userdata:dict = Depends(verify_id_token)):
     raise HTTPException(status_code = 400, detail = e.default_message)
   except Exception as e:
     raise HTTPException(status_code = e.code, detail = e.message)
-=======
 async def create_user(userdata: UserTokendata = Depends(verify_id_token), session:Session=Depends(get_session)):
   try:
     adds = Models.Users(uid = userdata.user_id, ticketmax = 3)
@@ -54,4 +51,3 @@ async def get_users(userdata: UserTokendata = Depends(verify_id_token), session:
     return list(map(lambda x: Schemes.UserOut(**x.__dict__),session.query(Models.Users).all()))
   except Exception:
     raise HTTPException(status_code=400)
->>>>>>> develop
