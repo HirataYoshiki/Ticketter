@@ -12,7 +12,7 @@ var firebaseConfig = {
   messagingSenderId: "941864709396",
   appId: "1:941864709396:web:d252f2c8acad7475ca6601"
 }
-// Initialize Firebase
+// Initialize Firebase 
 firebase.initializeApp(firebaseConfig)
 
 new Vue({

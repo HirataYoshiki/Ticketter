@@ -3,8 +3,13 @@
     <b-container>
       <HeaderColumn/>
       <b-row class="justify-content-md-center">
-        <b-col lg="5" md="7" sm="12">
-          <router-view/>
+        <b-col lg="7" md="8" sm="12">
+          <div v-if="!user">
+            <Signin/>
+          </div>
+          <div v-else>
+            <router-view/>
+          </div>
         </b-col>
       </b-row>
     </b-container>
@@ -14,14 +19,16 @@
 <script>
 import firebase from 'firebase'
 import HeaderColumn from '@/apps/HeaderColumn'
+import Signin from '@/apps/Signin/Signin.vue'
 export default {
   name: 'app',
   components: {
-    HeaderColumn
+    HeaderColumn,
+    Signin
   },
   data () {
     return {
-      user: {},
+      user: null,
       endpoints: {
         users: 'https://ticketter-fi7wohnrcq-an.a.run.app/users',
         tickets: 'https://ticketter-fi7wohnrcq-an.a.run.app/tickets',
@@ -31,8 +38,13 @@ export default {
   },
   methods: {
     _get_idToken: async function () {
-      const idToken = await firebase.auth().currentUser.getIdToken(true)
-      return idToken
+      try {
+        const idToken = await firebase.auth().currentUser.getIdToken(true)
+        return idToken
+      } catch (e) {
+        console.log('get idToken error')
+        return true
+      }
     },
     create_headers: async function () {
       const idToken = await this._get_idToken()
@@ -50,6 +62,7 @@ export default {
         const result = await this.axios.get(url, headers)
         return result.data
       } catch (e) {
+        alert(e)
         return false
       }
     },
@@ -60,6 +73,10 @@ export default {
     },
     get_all_users: async function () {
       return await this._get_request_to_backend(this.endpoints.users)
+    },
+    get_one_ticket: async function (ticketid) {
+      const url = `${this.endpoints.tickets}/${ticketid}`
+      return await this._get_request_to_backend(url)
     },
     get_all_tickets: async function () {
       return await this._get_request_to_backend(this.endpoints.tickets)
@@ -80,10 +97,11 @@ export default {
     post_user: async function () {
       return await this._post_request_to_backend(this.endpoints.users, {})
     },
-    post_ticket: async function (name, text) {
+    post_ticket: async function (name, text, volume) {
       const data = {
         name: name,
-        text: text
+        text: text,
+        volumemax: volume
       }
       return await this._post_request_to_backend(this.endpoints.tickets, data)
     },
@@ -93,11 +111,14 @@ export default {
         to_: uidList
       }
       return await this._post_request_to_backend(this.endpoints.interactions, data)
+    },
+    usergetter () {
+      return this.user
     }
   },
   provide () {
     return {
-      user: this.user,
+      user: this.usergetter,
       requestMethods: {
         users: {
           get_one_user: this.get_one_user,
@@ -119,8 +140,24 @@ export default {
     firebase.auth().onAuthStateChanged(user => {
       if (user) {
         this.user = user
+        const data = {
+          uid: user.uid,
+          name: user.displayName,
+          photoURL: user.photoURL,
+          email: user.email
+        }
+        try {
+          firebase.database().ref(`/users/${user.uid}`).set(data)
+          firebase.database().ref(`/users/${user.uid}`).on('child_changed',snap => {
+            this.user = snap.val()})
+          this.post_user()
+        } catch (e) {
+          alert(e)
+          return true
+        }
+        return true
       }
-      this.user = {}
+      this.user = null
       return true
     })
   }

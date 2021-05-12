@@ -1,8 +1,7 @@
 <template>
   <div>
-    <h3>以下よりログインしてください。</h3>
+    <h4>以下よりログインしてください。</h4>
     <div id="firebaseui-auth-container"/>
-    <b-button @click="requestMethods.users.post_user" variant="success">Register</b-button>
   </div>
 </template>
 
@@ -15,17 +14,28 @@ export default {
   inject: [
     'requestMethods'
   ],
-  mounted () {
+  created () {
     var ui = new firebaseui.auth.AuthUI(firebase.auth())
     const uiConfig = {
-      signInSuccessUrl: '/signin',
+      signInSuccessUrl: '/',
       signInFlow: 'redirect',
       signInOptions: [
         {
-          provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
-          signInMethod: firebase.auth.EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD
+          provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID
         }
-      ]
+      ],
+      callbacks: {
+        signInSuccessWithAuthResult (authResult) {
+          const data = {
+            uid: authResult.user.uid,
+            name: authResult.user.displayName,
+            photoURL: authResult.user.photoURL,
+            email: authResult.user.email
+          }
+          firebase.database().ref(`/users/${authResult.user.uid}`).set(data)
+          return true
+        }
+      }
     }
     ui.start('#firebaseui-auth-container', uiConfig)
   }
