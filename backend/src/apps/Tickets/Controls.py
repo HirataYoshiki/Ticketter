@@ -59,6 +59,7 @@ async def volume_of_all_tickets(
   return tickets_volume
   
 async def get_tickets(
+  uid: Optional[str] = None,
   skip: Optional[int] = 0,
   limit: Optional[int] = 100,
   token: UserTokendata = Depends(verify_id_token),
@@ -69,6 +70,8 @@ async def get_tickets(
   if skip > volume:
     raise exception
   query = session.query(Models.Tickets)
+  if uid:
+    query = query.filter(Models.Tickets.uid == uid)
   query = query.limit(limit)
   query = query.offset(skip)
   return list(map(lambda x: Schemes.TicketOut(**x.__dict__), query.all()))

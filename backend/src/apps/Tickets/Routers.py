@@ -13,6 +13,6 @@ async def create_ticket(ticket: Schemes.TicketOut = Depends(Controls.create_tick
 async def get_tickets(tickets:list = Depends(Controls.get_tickets)):
   return tickets
 
-@router.get('tickets/{ticketid}', response_model = Schemes.TicketOut)
+@router.get('/tickets/{ticketid}', response_model = Schemes.TicketOut)
 async def get_ticket(ticket: Schemes.TicketOut = Depends(Controls.get_ticket)):
   return ticket

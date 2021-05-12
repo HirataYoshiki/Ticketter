@@ -1,11 +1,10 @@
 from datetime import datetime
 from typing import Optional
-from operator import and_
 
 from fastapi import Depends, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy.exc import IntegrityError
-from sqlalchemy.sql.elements import or_
+from sqlalchemy import or_, and_
 
 from auth import verify_id_token, UserTokendata
 from apps.Interactions import Schemes
@@ -97,16 +96,27 @@ async def delete_my_given_tickets(
     raise HTTPException(status_code = 400)
 
 async def get_interactions(
-  uid: str,
+  from_: Optional[str] = None,
+  to_: Optional[str] = None,
   token: UserTokendata = Depends(verify_id_token),
   session: Session = Depends(get_session)
 ):
   try:
-    gets = Models.Interactions.__table__.select().where(or_(
-      Models.Interactions.__table__.c.from_ == uid,
-      Models.Interactions.__table__.c.to_ == uid
-    ))
-    selects = session.execute(gets)
-    return selects
+    if (from_ and to_):
+      query = session.query(Models.Interactions).filter(or_(
+        Models.Interactions.from_ == from_,
+        Models.Interactions.to_ == to_
+      ))
+    elif from_:
+      query = session.query(Models.Interactions).filter(
+        Models.Interactions.from_ == from_
+      )
+    elif to_:
+      query = session.query(Models.Interactions).filter(
+        Models.Interactions.to_ == to_
+      )
+    else:
+      query = session.query(Models.Interactions)
+    return list(map(lambda x: Schemes.TicketInteractionOut(**x.__dict__), query.all()))
   except:
     raise HTTPException(status_code=400)

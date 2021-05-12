@@ -1,0 +1,48 @@
+<template>
+  <b-list-group-item>
+    <b-row>
+      <b-col id="photourl">
+        <b-avatar :src="user.photoURL"/>
+      </b-col>
+      <b-col>
+        <b-row>{{ticket.name}}</b-row>
+        <b-row><small class="text-muted">{{trimmedTicketText}}</small></b-row>
+      </b-col>
+      <b-col id="numberofticketgive">
+        <p>発行数</p>
+        <p>{{ticket.volumemax}}</p>
+      </b-col>
+    </b-row>
+  </b-list-group-item>
+</template>
+<script>
+import firebase from 'firebase'
+export default {
+  name: 'ticketminiinner',
+  inject: ['requestMethods'],
+  props: {
+    ticket: Object
+  },
+  data () {
+    return {
+      user: {},
+      interactions: []
+    }
+  },
+  computed: {
+    trimmedTicketText () {
+      if (this.ticket.text.length > 16) {
+        const text = this.text.substr(0,16) + '...'
+        return text
+      }
+      return this.ticket.text
+    }
+  },
+  created () {
+    firebase.database().ref(`/users/${this.ticket.uid}`).once('value', (snap)=> {
+      this.user = snap.val()
+    })
+  
+  }
+}
+</script>

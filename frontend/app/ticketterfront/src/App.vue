@@ -56,11 +56,15 @@ export default {
       }
       return headers
     },
-    _get_request_to_backend: async function (url) {
+    _get_request_to_backend: async function (url, params = null) {
       const headers = await this.create_headers()
       try {
-        const result = await this.axios.get(url, headers)
-        return result.data
+        if (params) {
+          headers.params = params
+        } else {
+          const result = await this.axios.get(url, headers)
+          return result.data
+        }
       } catch (e) {
         alert(e)
         return false
@@ -81,9 +85,9 @@ export default {
     get_all_tickets: async function () {
       return await this._get_request_to_backend(this.endpoints.tickets)
     },
-    get_ones_interactions: async function (uid) {
-      const url = `${this.endpoints.interactions}/${uid}`
-      return await this._get_request_to_backend(url)
+    get_ones_interactions: async function (params=null) {
+      const url = this.endpoints.interactions
+      return await this._get_request_to_backend(url, params)
     },
     _post_request_to_backend: async function (url, data) {
       const headers = await this.create_headers()
