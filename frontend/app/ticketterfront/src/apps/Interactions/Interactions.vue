@@ -1,14 +1,18 @@
 <template>
-  <b-form-group>
-    <Ticket :ticket="ticket"/>
-    <b-form-checkbox-group 
-      v-model="selectedUser"
-      :options="users"
-      value-field="uid"
-      text-field="name"
-      />
-    <b-button @click="giveticket">Interactiontest</b-button>
-  </b-form-group>
+  <b-form>
+    <p>Give tickets</p>
+    <b-form-group>
+      <Ticket :ticket="ticket"/>
+    </b-form-group>
+    <b-form-group>
+      <b-form-checkbox-group 
+        v-model="selectedUser"
+        :options="users"
+        value-field="uid"
+        text-field="name"
+      /></b-form-group>
+    <b-button @click="giveticket">Give tickets</b-button>
+  </b-form>
 </template>
 <script>
   import firebase from 'firebase'
@@ -32,12 +36,23 @@
         },
         selectedUser: [],
         tickets: [],
-        users: []
+        users: [],
+        sortuid: ''
+      }
+    },
+    computed: {
+      sortedUsers () {
+        if (this.sortuid === '') {
+          return this.users
+        }
+        return this.users[this.sortuid]
       }
     },
     methods: {
       giveticket: async function () {
         await this.requestMethods.interactions.post_interactions(this.selectedTicket.ticketid, this.selectedUser)
+        alert('success')
+        this.selectedUser = []
       }
     },
     created () {

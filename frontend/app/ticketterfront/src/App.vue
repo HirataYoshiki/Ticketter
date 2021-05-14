@@ -3,7 +3,7 @@
     <b-container>
       <HeaderColumn/>
       <b-row class="justify-content-md-center">
-        <b-col lg="7" md="8" sm="12">
+        <b-col lg="7" md="8" sm="11" cols="auto" align-self="center">
           <div v-if="!user">
             <Signin/>
           </div>
@@ -61,10 +61,9 @@ export default {
       try {
         if (params) {
           headers.params = params
-        } else {
-          const result = await this.axios.get(url, headers)
-          return result.data
         }
+        const result = await this.axios.get(url, headers)
+        return result.data
       } catch (e) {
         alert(e)
         return false
@@ -131,6 +130,7 @@ export default {
         },
         tickets: {
           get_all_tickets: this.get_all_tickets,
+          get_one_ticket: this.get_one_ticket,
           post_ticket: this.post_ticket
         },
         interactions: {
@@ -174,5 +174,6 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
+  background: rgb(227, 240, 252);
 }
 </style>

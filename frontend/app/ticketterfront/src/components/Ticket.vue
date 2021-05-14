@@ -1,5 +1,6 @@
 <template>
-  <b-card :title="ticket.name" :sub-title="createdAt" class="shadow" @click="gotoInteraction">
+<b-container>
+  <b-card :title="ticket.name" :sub-title="createdAt" class="shadow" @click="gotoInteraction" style="max-width: 800px">
     <b-row>
       <b-col><b-avatar :src="creator.photoURL" @click="gotoProfile"/></b-col>
       <b-col>
@@ -16,9 +17,10 @@
       </b-col>
     </b-row>
     <b-card-text class="bg-light">
-      {{ticket.text}}
+      <p>{{ticket.text}}</p>
     </b-card-text>
   </b-card>
+  </b-container>
 </template>
 <script>
 import firebase from 'firebase'

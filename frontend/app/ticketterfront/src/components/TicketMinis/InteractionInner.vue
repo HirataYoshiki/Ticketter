@@ -1,12 +1,13 @@
 <template>
   <b-list-group-item>
     <b-row>
-      <b-col>
-        <small :class="textcolor">{{GiveOrTake}}</small>
-        <b-avatar :src="user.photoURL"/>
+      <b-col align-self="center">
+        <b-row class="d-flex justify-content-center"><small :class="textcolor">{{GiveOrTake}}</small></b-row>
+        <b-row class="d-flex justify-content-center"><b-avatar :src="user.photoURL"/></b-row>
+        <b-row class="d-flex justify-content-center"><small>{{createdAt}}</small></b-row>
       </b-col>
       <b-col>
-        <b-row><small>{{ticket.name}}</small></b-row>
+        <b-row><strong>{{ticket.name}}</strong></b-row>
         <b-row><small class="text-muted">{{trimmedTicketText}}</small></b-row>
       </b-col>
     </b-row>
@@ -27,7 +28,9 @@ export default {
   data () {
     return {
       user: {},
-      ticket: {}
+      ticket: {
+        text: ''
+      }
     }
   },
   computed: {
@@ -48,6 +51,13 @@ export default {
         return 'Give'
       }
       return 'Take'
+    },
+    createdAt () {
+      const dates = new Date(Date.parse(this.interaction.timestamp))
+      const date = dates.getDate()
+      const month = dates.getMonth() + 1
+      const year = dates.getFullYear()
+      return `date: ${year}/${month}/${date}`
     }
   },
   created: async function () {

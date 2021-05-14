@@ -2,15 +2,16 @@
   <b-list-group-item>
     <b-row>
       <b-col id="photourl">
-        <b-avatar :src="user.photoURL"/>
+        <b-row class="d-flex justify-content-center"><b-avatar :src="user.photoURL"/></b-row>
+        <b-row>
+          <b-col id="numberofticketgive">
+            <small class="text-muted">発行数:{{ticket.volumemax}}</small>
+          </b-col>
+        </b-row>
       </b-col>
       <b-col>
-        <b-row>{{ticket.name}}</b-row>
+        <b-row><strong>{{ticket.name}}</strong></b-row>
         <b-row><small class="text-muted">{{trimmedTicketText}}</small></b-row>
-      </b-col>
-      <b-col id="numberofticketgive">
-        <p>発行数</p>
-        <p>{{ticket.volumemax}}</p>
       </b-col>
     </b-row>
   </b-list-group-item>
@@ -32,7 +33,7 @@ export default {
   computed: {
     trimmedTicketText () {
       if (this.ticket.text.length > 16) {
-        const text = this.text.substr(0,16) + '...'
+        const text = this.ticket.text.substr(0,16) + '...'
         return text
       }
       return this.ticket.text
