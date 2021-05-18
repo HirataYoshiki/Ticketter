@@ -1,6 +1,6 @@
-import Home from '@/apps/Home/Home'
 import Create from '@/apps/Create/Create'
 import Profile from '@/apps/Profile/Profile'
+import Users from '@/apps/Users/Users'
 import Interactions from '@/apps/Interactions/Interactions'
 import RequestForm from '@/apps/RequestForm/RequestForm'
 
@@ -8,12 +8,20 @@ export const AppsRoutes = [
   {
     path: '/',
     name: 'Home',
-    component: Home
+    component: Profile,
+    props: {
+      me: true
+    }
   },
   {
     path: '/create',
     name: 'Create',
     component: Create
+  },
+  {
+    path: '/users',
+    name: 'users',
+    component: Users
   },
   {
     path: '/profile/:uid',

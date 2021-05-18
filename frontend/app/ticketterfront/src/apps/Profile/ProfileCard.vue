@@ -16,7 +16,7 @@
       <b-container>
         <b-row id="userbasicstatus">
           <b-col cols="auto">
-            <b-avatar :src="user.photoURL"/>
+            <b-avatar :src="user.photoURL" size="4rem"/>
           </b-col>
           <b-col>
             <b-row><b-form-group>ID: <small>{{uid}}</small></b-form-group></b-row>
@@ -28,8 +28,7 @@
             </b-row>
             <b-row>
               <b-form-group label-cols="4" label-cols-lg="4" label-size="sm" label="Email: " label-for="email">
-                <b-form-input v-model="edit.email" v-if="edit.status" id="email" :placeholder="user.email" size="sm"/>
-                <b-form-input v-else :value="user.email" disabled size="sm"/>
+                <b-form-input :value="user.email" disabled size="sm"/>
               </b-form-group>
             </b-row>
           </b-col>
@@ -48,11 +47,11 @@
                     :key="provider.provider">
                     <b-row>
                       <b-col>
-                        <b-form-checkbox size="lg" v-model="provider.link" @input="provider.link ? connectProvider(provider.providerId): unlinkProvider(provider.providerId)" switch>
+                        <b-form-group>
                           <b-icon :icon="provider.provider" :title="provider.provider" class="button"/><br>
-                          <div v-if="provider.link"><small class="text-success">Already Connected</small></div>
-                          <div v-else><small class="text-muted">Not Connected</small></div>
-                        </b-form-checkbox>
+                          <b-button variant="primary" :disabled="provider.link" @click="connectProvider(provider.providerId)" size="sm">Connect</b-button>
+                          <b-button variant="light" :disabled="!provider.link" @click="unlinkProvider(provider.providerId)" size="sm">Unlink</b-button>
+                        </b-form-group>
                       </b-col>
                     </b-row>
                   </b-list-group-item>
@@ -71,7 +70,7 @@
             <div v-for="provider in providers" :key="provider.provider">
               <div v-if="provider.link">
                 <b-col>
-                  <b-icon :icon="provider.provider" @click="gotoTwitter" class="button rounded-circle bg-primary"/>
+                  <b-icon :icon="provider.provider" @click="gotoTwitter" class="button"/>
                 </b-col>
               </div>
             </div>
@@ -101,8 +100,7 @@ export default {
       ticketmax: 0,
       edit: {
         status: false,
-        name: '',
-        email: ''
+        name: ''
       },
       providers: [
         {
@@ -122,15 +120,9 @@ export default {
       if (this.edit.name) {
         data.displayName = this.edit.name
       }
-      if (this.edit.email) {
-        data.email = this.edit.email
-      }
-      firebase.auth().currentUser.updateProfile(data).then((user)=> {
-        firebase.database().ref(`/users/${user.uid}`).set({
-          uid: user.uid,
-          name: user.displayName,
-          photoURL: user.photoURL,
-          email: user.email
+      firebase.auth().currentUser.updateProfile(data).then(()=> {
+        firebase.database().ref(`/users/${this.user.uid}`).update({
+          name: firebase.auth().currentUser.displayName
         }).then(this.showModal())
       }).catch((e) => {
         alert(e)
@@ -152,7 +144,7 @@ export default {
         provider = new firebase.auth.FacebookAuthProvider()
       }
       await firebase.auth().currentUser.linkWithPopup(provider)
-      //this._link_unlink_provider_local(providerId)
+      this._link_unlink_provider_local(providerId)
     },
     unlinkProvider (providerId) {
       firebase.auth().currentUser.unlink(providerId).then(() => {

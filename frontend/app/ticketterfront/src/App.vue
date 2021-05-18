@@ -115,6 +115,16 @@ export default {
       }
       return await this._post_request_to_backend(this.endpoints.interactions, data)
     },
+    delete_my_ticket: async function (interactionidList) {
+      const headers = await this.create_headers()
+      const data = {interactionidList: interactionidList}
+      try {
+        return await this.$axios.delete(this.endpoints.interactions, data, headers)
+      } catch (e) {
+        alert(e)
+      }
+      
+    },
     usergetter () {
       return this.user
     }
@@ -135,7 +145,8 @@ export default {
         },
         interactions: {
           get_ones_interactions: this.get_ones_interactions,
-          post_interactions: this.post_interactions
+          post_interactions: this.post_interactions,
+          delete_my_ticket: this.delete_my_ticket
         }
       }
     }
@@ -157,9 +168,8 @@ export default {
           this.post_user()
         } catch (e) {
           alert(e)
-          return true
         }
-        return true
+        return
       }
       this.user = null
       return true

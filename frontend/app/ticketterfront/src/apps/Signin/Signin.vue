@@ -1,7 +1,16 @@
 <template>
   <div>
-    <h4>以下よりログインしてください。</h4>
-    <div id="firebaseui-auth-container"/>
+    <b-container>
+      <b-row>
+        <b-col>
+          <b-img :src="src"/>
+        </b-col>
+        <b-col>
+          <h4>ログインはこちら</h4>
+          <div id="firebaseui-auth-container"/>
+        </b-col>
+      </b-row>
+    </b-container>
   </div>
 </template>
 
@@ -14,8 +23,13 @@ export default {
   inject: [
     'requestMethods'
   ],
+  data () {
+    return {
+      src: require('@/assets/logo.png')
+    }
+  },
   created () {
-    var ui = new firebaseui.auth.AuthUI(firebase.auth())
+    var ui = firebaseui.auth.AuthUI.getInstance() || new firebaseui.auth.AuthUI(firebase.auth())
     const uiConfig = {
       signInSuccessUrl: '/',
       signInFlow: 'redirect',

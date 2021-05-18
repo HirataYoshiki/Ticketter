@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ProfileCard :uid="uid"/>
+    <ProfileCard :uid="UID"/>
     <div>
       <Outer :addNew="false" :objects="myTickets" :showAll="false" :title="'作ったチケット'"/>
       <Outer :addNew="false" :objects="givens" :showAll="true" :interaction="true" :title="'もらったチケット'"/>
@@ -17,7 +17,14 @@ import firebase from 'firebase'
     name: 'profile',
     inject: [ 'requestMethods' ],
     props: {
-      uid: String
+      uid: {
+        type: String,
+        default: ''
+      },
+      me: {
+        type: Boolean,
+        default: false
+      }
     },
     components: {ProfileCard, Outer},
     data () {
@@ -27,10 +34,24 @@ import firebase from 'firebase'
         givens: []
       }
     },
+    computed: {
+      UID () {
+        if (this.me) {
+          return firebase.auth().currentUser.uid
+        }
+        return this.uid
+      }
+    },
     created: async function () {
-      const myticketsnap = this.requestMethods.tickets.get_all_tickets()
-      const gavesnap = this.requestMethods.interactions.get_ones_interactions({from_: firebase.auth().currentUser.uid})
-      const givensnap = this.requestMethods.interactions.get_ones_interactions({to_: firebase.auth().currentUser.uid});
+      if (this.me) {
+        var myticketsnap = this.requestMethods.tickets.get_all_tickets()
+        var gavesnap = this.requestMethods.interactions.get_ones_interactions({from_: firebase.auth().currentUser.uid})
+        var givensnap = this.requestMethods.interactions.get_ones_interactions({to_: firebase.auth().currentUser.uid})
+      } else {
+        myticketsnap = this.requestMethods.tickets.get_all_tickets()
+        gavesnap = this.requestMethods.interactions.get_ones_interactions({from_: this.uid})
+        givensnap = this.requestMethods.interactions.get_ones_interactions({to_: this.uid})
+      }
       [this.myTickets, this.gaves, this.givens] = await Promise.all([myticketsnap, gavesnap, givensnap])
     }
   }

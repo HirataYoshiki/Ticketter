@@ -1,20 +1,30 @@
 <template>
-  <b-list-group-item>
-    <b-row>
-      <b-col id="photourl">
-        <b-row class="d-flex justify-content-center"><b-avatar :src="user.photoURL"/></b-row>
-        <b-row>
-          <b-col id="numberofticketgive">
-            <small class="text-muted">発行数:{{ticket.volumemax}}</small>
-          </b-col>
-        </b-row>
-      </b-col>
-      <b-col>
-        <b-row><strong>{{ticket.name}}</strong></b-row>
-        <b-row><small class="text-muted">{{trimmedTicketText}}</small></b-row>
-      </b-col>
-    </b-row>
-  </b-list-group-item>
+  <div>
+    <b-list-group-item @click="changeModal">
+      <b-row>
+        <b-col id="photourl">
+          <b-row class="d-flex justify-content-center"><b-avatar :src="user.photoURL"/></b-row>
+          <b-row>
+            <b-col id="numberofticketgive">
+              <small class="text-muted">発行数:{{ticket.volumemax}}</small>
+            </b-col>
+          </b-row>
+        </b-col>
+        <b-col>
+          <b-row><strong>{{ticket.name}}</strong></b-row>
+          <b-row><small class="text-muted">{{trimmedTicketText}}</small></b-row>
+        </b-col>
+      </b-row>
+    </b-list-group-item>
+    <b-modal v-model="modal" centered>
+      <template #modal-title>{{ticket.name}}</template>
+      <p>チケットを配りますか？</p>
+      <template #modal-footer>
+        <b-button variant="primary" @click="gotoInteraction">OK</b-button>
+        <b-button variant="secondary" @click="changeModal">Cancel</b-button>
+      </template>
+    </b-modal>
+  </div>
 </template>
 <script>
 import firebase from 'firebase'
@@ -27,7 +37,8 @@ export default {
   data () {
     return {
       user: {},
-      interactions: []
+      interactions: [],
+      modal: false
     }
   },
   computed: {
@@ -37,6 +48,14 @@ export default {
         return text
       }
       return this.ticket.text
+    }
+  },
+  methods: {
+    changeModal () {
+      this.modal = !this.modal
+    },
+    gotoInteraction () {
+      this.$router.push({name: 'interactions', params: {ticket: this.ticket}})
     }
   },
   created () {
