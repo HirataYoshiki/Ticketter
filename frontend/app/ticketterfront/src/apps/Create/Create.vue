@@ -8,7 +8,7 @@
         <b-form-input placeholder="チケットの名前" v-model="name"></b-form-input>
       </b-form-group>
       <b-form-group>
-        <label for="content">チケットの内容 {{text.length}}/255</label>
+        <label for="content">チケットの内容 {{text.length}}/255文字</label>
         <b-form-textarea id="content" placeholder="チケットに記載する文章を記入してください" v-model="text" :state="text.length <= 255"></b-form-textarea>
       </b-form-group>
       <b-form-group>
@@ -75,6 +75,7 @@ export default {
         this.name = ''
         this.text = ''
         this.volume = 100
+        this.modal = false
       })
     }
   }

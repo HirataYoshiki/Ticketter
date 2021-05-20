@@ -11,7 +11,7 @@
         toggle-class="nav-link-custom"
         right
         >
-        <b-dropdown-item to="/"><b-icon icon="code-slash"/><small> 開発者の方</small></b-dropdown-item>
+        <b-dropdown-item to="/fordevs"><b-icon icon="code-slash"/><small> 開発者の方</small></b-dropdown-item>
         <b-dropdown-divider></b-dropdown-divider>
         <b-dropdown-item @click="Logout"><b-icon icon="door-closed-fill"/><small> ログアウト</small></b-dropdown-item>
       </b-nav-item-dropdown>

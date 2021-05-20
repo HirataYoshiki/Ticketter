@@ -3,6 +3,7 @@ import Profile from '@/apps/Profile/Profile'
 import Users from '@/apps/Users/Users'
 import Interactions from '@/apps/Interactions/Interactions'
 import RequestForm from '@/apps/RequestForm/RequestForm'
+import ForDeveloppers from '@/apps/ForDeveloppers/ForDeveloppers'
 
 export const AppsRoutes = [
   {
@@ -39,5 +40,10 @@ export const AppsRoutes = [
     path: '/form',
     name: 'requestform',
     component: RequestForm
+  },
+  {
+    path: '/fordevs',
+    name: 'fordevs',
+    component: ForDeveloppers
   }
 ]

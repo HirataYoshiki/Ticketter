@@ -81,8 +81,8 @@ export default {
       const url = `${this.endpoints.tickets}/${ticketid}`
       return await this._get_request_to_backend(url)
     },
-    get_all_tickets: async function () {
-      return await this._get_request_to_backend(this.endpoints.tickets)
+    get_all_tickets: async function (params=null) {
+      return await this._get_request_to_backend(this.endpoints.tickets, params)
     },
     get_ones_interactions: async function (params=null) {
       const url = this.endpoints.interactions

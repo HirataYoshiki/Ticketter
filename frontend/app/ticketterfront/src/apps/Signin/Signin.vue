@@ -3,10 +3,10 @@
     <b-container>
       <b-row>
         <b-col>
-          <b-img :src="src"/>
+          <b-img :src="src" fluid/>
         </b-col>
         <b-col>
-          <h4>ログインはこちら</h4>
+          <p>ログインはこちら</p>
           <div id="firebaseui-auth-container"/>
         </b-col>
       </b-row>
