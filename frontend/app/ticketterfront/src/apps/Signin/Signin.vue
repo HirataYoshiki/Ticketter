@@ -2,14 +2,10 @@
   <div>
     <b-container>
       <b-row>
-        <b-col>
-          <b-img :src="src" fluid/>
-        </b-col>
-        <b-col>
-          <p>ログインはこちら</p>
-          <div id="firebaseui-auth-container"/>
-        </b-col>
+        <b-img :src="src" width="400px" fluid/>
       </b-row>
+      <p>ログインはこちら</p>
+      <div id="firebaseui-auth-container"/>
     </b-container>
   </div>
 </template>
@@ -36,6 +32,10 @@ export default {
       signInOptions: [
         {
           provider: firebase.auth.GoogleAuthProvider.PROVIDER_ID
+        },
+        {
+          provider: firebase.auth.EmailAuthProvider.PROVIDER_ID,
+          signInMethod: firebase.auth.EmailAuthProvider.EMAIL_LINK_SIGN_IN_METHOD
         }
       ],
       callbacks: {

@@ -6,7 +6,7 @@
           <b-row class="d-flex justify-content-center"><b-avatar :src="user.photoURL"/></b-row>
           <b-row>
             <b-col id="numberofticketgive">
-              <small class="text-muted">発行数:{{ticket.volumemax}}</small>
+              <small class="text-muted">残り数:{{ticket.volumemax-number_of_ticket_gave(ticket.ticketid)}}/{{ticket.volumemax}}枚</small>
             </b-col>
           </b-row>
         </b-col>
@@ -30,7 +30,7 @@
 import firebase from 'firebase'
 export default {
   name: 'ticketminiinner',
-  inject: ['requestMethods'],
+  inject: ['requestMethods', 'profile_is_user','number_of_ticket_gave'],
   props: {
     ticket: Object
   },
@@ -52,7 +52,9 @@ export default {
   },
   methods: {
     changeModal () {
-      this.modal = !this.modal
+      if (this.profile_is_user()) {
+        this.modal = !this.modal
+      }
     },
     gotoInteraction () {
       this.$router.push({name: 'interactions', params: {ticket: this.ticket}})

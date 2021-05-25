@@ -2,9 +2,9 @@
   <div>
     <ProfileCard :uid="UID"/>
     <div>
-      <Outer :addNew="false" :objects="myTickets" :showAll="false" :title="'作ったチケット'"/>
+      <Outer :addNew="false" :objects="myTickets" :title="'作ったチケット'"/>
       <Outer :addNew="false" :objects="givens" :showAll="true" :interaction="true" :title="'もらったチケット'"/>
-      <Outer :addNew="false" :objects="gaves" :showAll="true" :give="true" :interaction="true" :title="'あげたチケット'"/>
+      <Outer :addNew="false" :objects="gaves" :showAll="true" :interaction="true" :title="'あげたチケット'" :give="true"/>
     </div>
   </div>
 </template>
@@ -42,17 +42,46 @@ import firebase from 'firebase'
         return this.uid
       }
     },
-    created: async function () {
-      if (this.me) {
-        var myticketsnap = this.requestMethods.tickets.get_all_tickets()
-        var gavesnap = this.requestMethods.interactions.get_ones_interactions({from_: firebase.auth().currentUser.uid})
-        var givensnap = this.requestMethods.interactions.get_ones_interactions({to_: firebase.auth().currentUser.uid})
-      } else {
-        myticketsnap = this.requestMethods.tickets.get_all_tickets()
-        gavesnap = this.requestMethods.interactions.get_ones_interactions({from_: this.uid})
-        givensnap = this.requestMethods.interactions.get_ones_interactions({to_: this.uid})
+    methods: {
+      init: async function () {
+        if (this.me) {
+          var myticketsnap = this.requestMethods.tickets.get_all_tickets({uid: firebase.auth().currentUser.uid})
+          var gavesnap = this.requestMethods.interactions.get_ones_interactions({from_: firebase.auth().currentUser.uid})
+          var givensnap = this.requestMethods.interactions.get_ones_interactions({to_: firebase.auth().currentUser.uid})
+        } else {
+          myticketsnap = this.requestMethods.tickets.get_all_tickets({uid: this.uid})
+          gavesnap = this.requestMethods.interactions.get_ones_interactions({from_: this.uid})
+          givensnap = this.requestMethods.interactions.get_ones_interactions({to_: this.uid})
+        }
+        [this.myTickets, this.gaves, this.givens] = await Promise.all([myticketsnap, gavesnap, givensnap])
+      },
+      profile_is_user () {
+        if (this.uid === firebase.auth().currentUser.uid || this.me== true) {
+          return true
+        }
+        return false
+      },
+      number_of_ticket_gave: function (ticketid) {
+        return this.gaves.filter(n => n.ticketid===ticketid).length
       }
-      [this.myTickets, this.gaves, this.givens] = await Promise.all([myticketsnap, gavesnap, givensnap])
+    },
+    created: async function () {
+      await this.init()
+    },
+    watch: {
+      uid: async function (val) {
+        await this.init()
+        this.uid = val
+      },
+      me: function (val) {
+        this.me = val
+      }
+    },
+    provide () {
+      return {
+        profile_is_user: this.profile_is_user,
+        number_of_ticket_gave: this.number_of_ticket_gave
+      }
     }
   }
 </script>

@@ -5,6 +5,8 @@
       <b-nav-item to="/"><b-icon icon="house"/><small>ホーム</small></b-nav-item>
       <b-nav-item to="/create"><b-icon icon="vector-pen"/><small>つくる</small></b-nav-item>
       <b-nav-item to="/users"><b-icon icon="people-fill"/><small>ユーザー</small></b-nav-item>
+    </b-navbar-nav>
+    <b-navbar-nav class="ml-auto">
       <b-nav-item-dropdown
         id="my-nav-dropdown"
         text="その他"

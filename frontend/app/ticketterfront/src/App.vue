@@ -117,9 +117,10 @@ export default {
     },
     delete_my_ticket: async function (interactionidList) {
       const headers = await this.create_headers()
-      const data = {interactionidList: interactionidList}
+      const data = {data:{interactionidList: interactionidList}}
       try {
-        return await this.$axios.delete(this.endpoints.interactions, data, headers)
+        const result = await this.$axios.delete(this.endpoints.interactions, data, headers)
+        return result.data
       } catch (e) {
         alert(e)
       }

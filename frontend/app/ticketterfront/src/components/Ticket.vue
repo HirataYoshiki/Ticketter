@@ -29,6 +29,7 @@ export default {
   props: {
     ticket: Object
   },
+  inject: ['number_of_ticket_gave'],
   data () {
     return {
       creator: {

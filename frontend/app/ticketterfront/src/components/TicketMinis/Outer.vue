@@ -31,13 +31,15 @@
         </div>
         <div v-else>
           <TicketInner :ticket="ticket" v-for="ticket in objects" :key="ticket.ticketid"/>
-          <b-list-group-item v-if="objects.length<3">
-            <b-nav class="d-flex justify-content-md-center">
-              <b-nav-item to='/create'>
-                <b-icon icon="plus-square"/> Create New
-              </b-nav-item>
-            </b-nav>
-          </b-list-group-item>
+          <div v-if="profile_is_user()===true">
+            <b-list-group-item v-if="objects.length<3">
+              <b-nav class="d-flex justify-content-md-center">
+                <b-nav-item to='/create'>
+                  <b-icon icon="plus-square"/> Create New
+                </b-nav-item>
+              </b-nav>
+            </b-list-group-item>
+          </div>
         </div>
       </b-list-group>
     </b-card>
@@ -78,11 +80,18 @@ import InteractionInner from './InteractionInner.vue'
 import TicketInner from './TicketInner.vue'
 export default {
   components: { TicketInner, InteractionInner },
+  inject: ['profile_is_user'],
   name: 'ticketminiouter',
   props: {
     title: String,
-    showAll: Boolean,
-    addNew: Boolean,
+    showAll: {
+      type: Boolean,
+      default: false
+    },
+    addNew: {
+      type: Boolean,
+      default: false
+    },
     interaction: {
       type: Boolean,
       default: false

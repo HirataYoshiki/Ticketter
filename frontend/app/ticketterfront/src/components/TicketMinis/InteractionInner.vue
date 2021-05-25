@@ -29,21 +29,21 @@
             <b-col>
               <strong>プロフィールを見る</strong>
             </b-col>
-            <b-col>
+            <b-col class="text-center">
               <b-icon icon="arrow-right"/>
             </b-col>
           </b-row>
         </b-list-group-item>
-        <b-list-group-item v-if="!give" @click="deleteTicket">
-          <b-row>
-            <b-col>
-              <strong>削除</strong>
-            </b-col>
-            <b-col>
-              <b-icon icon="trash-fill"/>
-            </b-col>
-          </b-row>
-        </b-list-group-item>
+          <b-list-group-item v-if="!give && profile_is_user()" @click="deleteTicket">
+            <b-row>
+              <b-col>
+                <strong>削除</strong>
+              </b-col>
+              <b-col class="text-center">
+                <b-icon icon="trash-fill" variant="danger"/>
+              </b-col>
+            </b-row>
+          </b-list-group-item>
       </b-list-group>
       <template #modal-footer>
         <b-button size="sm" variant="danger" @click="changeModal">
@@ -67,7 +67,7 @@ export default {
       default: false
     }
   },
-  inject: ['requestMethods'],
+  inject: ['requestMethods', 'profile_is_user'],
   data () {
     return {
       user: {},

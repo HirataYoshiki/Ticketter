@@ -54,8 +54,10 @@ export default {
   },
   created: async function () {
     const usersSnap = await firebase.database().ref('/users').once('value')
-    this.users = usersSnap.val()
-    this.displayUsers = usersSnap.val()
+    const u = usersSnap.val()
+    delete u[firebase.auth().currentUser.uid]
+    this.users = u
+    this.displayUsers = u
   }
 }
 </script>

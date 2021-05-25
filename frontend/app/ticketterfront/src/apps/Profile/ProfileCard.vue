@@ -170,6 +170,19 @@ export default {
       } else {
         return true
       }
+    },
+    init: async function () {
+      const user = await firebase.database().ref('/users/' + this.uid).once('value')
+      this.user = user.val()
+      firebase.auth().currentUser.providerData.forEach((p) => {
+        this._link_unlink_provider_local(p.providerId)
+      })
+      try {
+        const profileUserInBackend = await this.requestMethods.users.get_one_user(this.uid)
+        this.ticketmax = profileUserInBackend.ticketmax
+      } catch (e) {
+        this.ticketmax = 0
+      }
     }
   },
   computed: {
@@ -181,16 +194,11 @@ export default {
     }
   },
   created: async function () {
-    const user = await firebase.database().ref('/users/' + this.uid).once('value')
-    this.user = user.val()
-    firebase.auth().currentUser.providerData.forEach((p) => {
-      this._link_unlink_provider_local(p.providerId)
-    })
-    try {
-      const profileUserInBackend = await this.requestMethods.users.get_one_user(this.uid)
-      this.ticketmax = profileUserInBackend.ticketmax
-    } catch (e) {
-      this.ticketmax = 0
+    await this.init()
+  },
+  watch: {
+    uid: async function () {
+      await this.init()
     }
   }
 }
