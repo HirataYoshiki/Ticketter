@@ -1,8 +1,8 @@
 # Ticketter
  
-Private certificate(* Hereinafter referred to as a "ticket") creating & sending application.
+<u>Private certificate</u>(* Hereinafter referred to as a "ticket") creating & sending application.
 
-[Ticketter](https://ticketter.web.app "Ticketter")
+[Ticketter](https://ticketter.web.app "link to Ticketter")
  
 
 # Features
@@ -24,15 +24,22 @@ Private certificate(* Hereinafter referred to as a "ticket") creating & sending 
   
   Framework: FastAPI
   ```Pipfile
-  fastapi
-  firebase-admin
-  pydantic
-  sqlalchemy
-  pymysql
-  async-exit-stack
-  async-generator
-  gunicorn
-  uvicorn
+  [packages]
+  fastapi = "*"
+  firebase-admin = "*"
+  pydantic = "*"
+  sqlalchemy = "*"
+  pymysql = "*"
+  async-exit-stack = "*"
+  async-generator = "*"
+  gunicorn = "*"
+  uvicorn = {extras = ["standard"], version = "*"}
+
+  [dev-packages]
+  pytest = "*"
+
+  [requires]
+  python_version = "3.9"
   ```
   
   
